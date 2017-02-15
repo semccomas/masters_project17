@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 import sys
 
 # data in and data out
-data = pd.read_csv('~/Desktop/Masters_Thesis/jejunum_csv.csv', index_col = 0, header = 0)
+data = pd.read_csv('~/Desktop/Masters_Thesis/data/jejunum_csv.csv', index_col = 0, header = 0)
 data = data.dropna()    #remove NaN's, yes it actualy removes them instead of replacing with 0 yes I checked
-csv_out = '~/Desktop/Masters_Thesis/jejunum_cutoff.csv'
+csv_out = '~/Desktop/Masters_Thesis/data/jejunum_cutoff.csv'
 
 
 # get pep and peptides df's
