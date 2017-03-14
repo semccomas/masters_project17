@@ -6,12 +6,12 @@ import matplotlib.patches as mpatches
 
 data = pd.read_csv('~/Desktop/Masters_Thesis/data/data_original_with_all_protein_id.csv', index_col = 1)
 
-markers = ['ALPI', 'SI', 'MGAM', 'VWF', 'PKN1', 'MYH11', 'ACTA1', 'ACTA2', 'FGFR4', 'COL1A1', 'COL4A1', 'COL4A2', 'PARK7']
+markers = ['ALPI', 'SI', 'MGAM', 'VWF', 'PKN1', 'MYH11', 'ACTA1', 'ACTA2', 'FGFR4', 'COL1A1', 'COL4A1', 'COL4A2', 'PARK7']  # 'PARK7'
 
 conc = data.loc[:, [col for col in data if 'pmol/mg' in col]].drop('Average concentration(pmol/mg) ', 1)
 #conc = conc.drop('Average concentration(pmol/mg) ', 1)
 
-conc = conc.drop('Concentration (pmol/mg) J3', 1)
+#conc = conc.drop('Concentration (pmol/mg) J3', 1)
 conc = conc.drop(conc.columns[-3:], 1)
 
 col = list(conc)
@@ -22,6 +22,7 @@ conc = conc.rename(columns = dct)
 
 markers_df = conc.loc[markers].transpose()
 markers_df = markers_df.apply(np.log2)
+#markers_df = markers_df.subtract(markers_df['PARK7'], 0)
 colors = ['red','red','red','blue','blue','orange','orange','orange','green','green','green','green','black']
 
 #fig= plt.figure()
@@ -37,4 +38,9 @@ BM = mpatches.Patch(color='green', label='Basement Membrane')
 PARK = mpatches.Patch(color='black', label='PARK7/ DJ1')
 
 plt.legend(handles=[EP, ED, SM, BM, PARK], loc=2)
-plt.show()
+plt.savefig('markers.png')
+markers_df.to_csv('markers_original_concentration.csv')
+
+## ABCC2 = MRP2 = epith
+## BCRP = ABCG2 = EPITH
+## OSTALPHA = OSTA = BL 
