@@ -41,6 +41,18 @@ this is how the example at minimize explains it. So X would be Cguess/ C. Maybe 
 Or maybe could have in Cguess and C 
 
 
+
+Update 15 March: from scipy beginners guide to optimization
+You can set your constraints as a function. ex: if you know that x[1] should == 4:
+def constraint1(x):
+	return 4-x (or x-4) so that it is 0
+
+then when you add to the optimizer:
+cons1 = {'type': 'ineq', 'fun':constraint1}
+and then make it into a list
+cons = [cons1,cons2,cons3,cons_n]
+
+
 practice code:
 CL * P = np.dot. Numpy dot formula = matrix multiplication of these two values, like khan acacemy video
 np.dot(a, b)
@@ -71,29 +83,48 @@ TC = (TCL_for_c1 * TP_for_c1) + (TCL_for_c2 * TP_for_c2)
 
 
 C = pd.read_csv('~/Desktop/Masters_Thesis/data/liver_data/optimizer_small_data_liver.csv', index_col = 0)
+C = np.asarray(C)
+C[C == 0] = 0.00000000000001
+np.random.seed(1)
 CL = np.random.rand(2, np.shape(C)[1])  #make the CL guess array, it's as wide as as many samples as we have, and 2 tall, one for each cell type (pretending we have two for now)
 P = np.random.rand(np.shape(C)[0], 2)   #make the P guess array, it's 2 wide, one for each cell type and it's as long as we have proteins
 
-#add more here if you use more cell lines
-CL1 = CL[0][np.newaxis] #same shape as TCL_for_c1 (just more samples). Is wider than is tall which is what we want
-CL2 = CL[1][np.newaxis]
+#get shapes to make variable change easier
+CL_shape = np.shape(CL)
+P_shape = np.shape(P)
 
-P1 = P[:,0][np.newaxis].transpose()
-P2 = P[:,1][np.newaxis].transpose()
+##########################
+##optimizer part
+#######################
 
 warnings.filterwarnings('ignore')  #this can be dangerous so it might not be good to have here but res likes to get mad when the array is variable values
-def min_func(x):
-	return np.mean(abs(np.log10(x)))   #we have the mean in here because res does not like to have an array as the output
 
-C = np.asarray(C)
-Cguess= (CL1 * P1) + (CL2 * P2)   # I have checked to see that the matrix multiplication is done correctly and it is!! 
-x = Cguess/ C    #what we actually want
-x = x.flatten()   # has to be flat shape or res yells
-x = np.nan_to_num(x) # right now this replaces the inf, but SHOULD FIX TO REFLECT SOMETHING DIV BY 0, RIGHT NOW IT IS A HUGE NUMBER ( X * 10 **308)
+def objective(tot):
+	#get back original arrays, res only works off one guess
+	CL_reshaped, P_reshaped = np.split(tot, [len(CL)])
 
-res = minimize(min_func, x, method = 'nelder-mead')
-print res.x        #right now there is no change between x and res x 
+	#first reshape CL and P. I know it's a lot of variables but lenCL makes it that way
+	CL_reshaped = np.reshape(CL_reshaped, CL_shape)
+	P_reshaped = np.reshape(P_reshaped, P_shape)
 
+	#get an array for each cell line so we can make Cguess
+	CL1 = CL_reshaped[0][np.newaxis] #same shape as TCL_for_c1 (just more samples). Is wider than is tall which is what we want
+	CL2 = CL_reshaped[1][np.newaxis]
+	P1 = P_reshaped[:,0][np.newaxis].transpose()
+	P2 = P_reshaped[:,1][np.newaxis].transpose()
+
+	Cguess = (CL1 * P1) + (CL2 * P2)
+	return np.mean(abs(np.log10(Cguess/C)))   #we have the mean in here because res does not like to have an array as the output
+	#return Cguess
+
+
+#this is for the minimizer input 
+CL = CL.flatten()
+P = P.flatten()   
+tot = np.concatenate([CL, P])
+
+res = minimize(objective, tot, method = 'nelder-mead')
+print res        #right now there is no change between x and res x 
 
 
 
