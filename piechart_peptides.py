@@ -41,5 +41,5 @@ ax4.set_title('Caco2 data')
 plt.legend(labels, loc = 'center left', bbox_to_anchor = (-0.385, 1.1)).draggable()
 plt.tight_layout()
 #plt.show()
-plt.savefig('piechart_peptides.png')
+plt.savefig('piechart_peptides.png', format = 'png', dpi = 700)
 

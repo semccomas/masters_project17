@@ -111,8 +111,9 @@ def objective(tot):
 	CL2 = CL_reshaped[1][np.newaxis]
 	P1 = P_reshaped[:,0][np.newaxis].transpose()
 	P2 = P_reshaped[:,1][np.newaxis].transpose()
+	#np.matmul is the same as these CL1 * P1. in Matlab it would be much easier to do it that way because  
 	Cguess = (CL1 * P1) + (CL2 * P2)
-	return (abs(np.log10(Cguess/C)))   #we have the mean in here because res does not like to have an array as the output
+	return np.mean(abs(np.log10(Cguess/C)))   #we have the mean in here because res does not like to have an array as the output
 	#return Cguess #np.mean(np.log(Cguess/C))
 
 
