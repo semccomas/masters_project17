@@ -9,7 +9,9 @@ cell_num = 2;             % this we can change later depending on how many cell 
 a_cl = [0.5 0.2 0.1; 0.5 0.8 0.9];
 a_p = [100 0; 50 50; 0 10; 40 80];
 a_c_guess = a_p * a_cl % 4 2 * 2 3. Inner dimensions must agree. This is the right kind of multiplication as well! Matches example
-%}
+%]
 
-C_guess = P * CL 
-C_guess ./ C    %this is kind of the objective function
+
+%C_guess = P * CL 
+
+%C_guess / C
