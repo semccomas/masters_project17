@@ -1,0 +1,25 @@
+%{
+the point of this script is that it is a super simplified version of our
+ optimizer, just to make sure we can understand the functions and the
+ constraints. Will deal with the other things later
+
+a's are actual. CL and P are the guesses
+a_cl = [0.5 0.2 0.1; 0.5 0.8 0.9]   ;
+a_p = [100 0;50 50;0 10;40 80]  ;
+need to deal with how to do zeros
+making guess slightly more accurate (ie. not just from 0-1 but from 0-100)
+
+%}
+
+
+
+
+C = [50 20 10;50 50 50;5 8 9;60 72 76]  ;
+
+rng(2, 'twister')   ;   %set seed for rand 
+CL = rand(2, size(C,2)) ;
+P = rand(size(C,1), 2)  ;
+
+objective(P, CL)
+%x = fmincon(objective, (P, CL) )
+
