@@ -1,25 +1,49 @@
-%{
-the point of this script is that it is a super simplified version of our
- optimizer, just to make sure we can understand the functions and the
- constraints. Will deal with the other things later
-
-a's are actual. CL and P are the guesses
-a_cl = [0.5 0.2 0.1; 0.5 0.8 0.9]   ;
-a_p = [100 0;50 50;0 10;40 80]  ;
-need to deal with how to do zeros
-making guess slightly more accurate (ie. not just from 0-1 but from 0-100)
-
-%}
-
-
-
-
 C = [50 20 10;50 50 50;5 8 9;60 72 76]  ;
 
+cell_num = 2 ; %will change the dimension of P and CL
 rng(2, 'twister')   ;   %set seed for rand 
-CL = rand(2, size(C,2)) ;
-P = rand(size(C,1), 2)  ;
+CL = rand(cell_num, size(C,2)) ;    %CL is as tall as the cell number and as long as the sample number 
+P = rand(size(C,1), cell_num)  ;   %P is as tall as the protein number and as long as the cell number 
+CL_shape = size(CL)  ;      %same as above, [cell #, sample #]
+P_shape = size(P)  ;        %same as above, [protein #, cell #]
 
-objective(P, CL)
-%x = fmincon(objective, (P, CL) )
+%flatten the arrays for use in optimizers
+P_flat = reshape(P,(numel(P)), 1) ;
+CL_flat = reshape(CL,(numel(CL)), 1) ;
+cguess_flat = cat(1, P_flat, CL_flat) ;
+
+%%% the optimizer itself + objectives
+A = [ ] ;
+b = [ ] ;
+Aeq = [ ] ;   
+beq = [ ] ;
+lb = zeros(size(cguess_flat)) ;  % all values must be positive
+ub = zeros(size(cguess_flat)) ;    
+ub(1:length(P_flat)) = 500 ;    %upper bounds for protein is like 500, change if you want
+ub(length(P_flat)+1:end) = 1 ;    %and is 1 for the cell line
+
+x = fmincon(@objective, cguess_flat, A, b, Aeq, beq, lb, ub)
+
+
+%{
+ Things in here you can change:
+- cell number, how many different types of cells you have (cell_num)
+- whether you want the cell type/ sample to be out of 1 or 100 (in Aeq,
+beq, and ub)
+- concentration for proteins (ub)
+
+
+A=diag([7 3 1],2)+diag(2,4);
+%Aeq = diag(ones(n-abs(shift),1),shift) where n is matrix size and shift is
+%how many to move it over by . I did n = 10. Just brainstorming here
+
+diag(vector, shift length)- will make matrix as long as it needs to be to
+fit the values. the rest will be zeros so dont have to worry about that
+part . Pos shift length is one way, neg is other
+
+
+
+
+
+%}
 
