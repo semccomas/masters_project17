@@ -14,6 +14,5 @@ cguess_flat = cat(1, P_flat, CL_flat) ;
 %%% the optimizer itself + objectives
 %A is M x N. M is number inequalities, N is number of feat (must = size of
 %array)
-% B is sized M
-%
+% B is sized M, so it has
 x = fmincon(@objective, cguess_flat, zeros(14),zeros(14,1), zeros(2))
