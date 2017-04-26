@@ -11,7 +11,7 @@ beq, and ub)
 %}
 
 %C = [50 20 10;50 50 50;5 8 9;60 72 76]  ;
-filename = 'C:\Users\sarmc412\OneDrive\liver\Proteomics_liver_fresh_hepatocytes.xlsx';
+filename = 'C:\Users\sarmc412\OneDrive\liver\practice.csv';
 C = xlsread(filename)  ;
 
 
@@ -49,8 +49,13 @@ cguess_flat = cat(1, P_flat, CL_flat) ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%% Constraints %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-A = [ ] ;      %no linear inequalities atm
-b = [ ] ;
+%A = [ ] ;      %no linear inequalities atm
+%b = [ ] ;
+rows_eq = [4, 5, 6]
+A = zeros(length(rows_eq, length(cguess_flat)) ;
+for a = 1:length(rows_eq) 
+    
+
 
 Aeq = zeros(sample_num, length(cguess_flat)) ;      %for the linear equality of the CL's all equalling the sum of 1
 c = 1 ;
