@@ -23,6 +23,9 @@ or beq. To confirm that you have specified the correct value
 POTENTIAL ISSUES:
 -i have loops specifically for hep and other. At the moment cant add other
 cell lines without adding more loops
+    this is the case for:
+        - assigning vals to P
+        - assigning vals to Aeq
 -size of A and Aeq. change to a different kind of matrix somehow idk
 
 
@@ -47,7 +50,7 @@ lower_limit = -0.0015 ;              %for b in inequality constraint
 rows_ineq_other = [4, 5, 6] ;        %for A in ineq constraint. also = len b
 
 markers_hepatocyte = [90, 318, 17, 0, 0, 0, 41] ;               %what are the values you want to specify?
-rows_eq_hepatocytes = [1, 2, 3, 4, 5, 6, 7] ;                   %in original data, what rows do you want to add a specific value to for the hepatocytes?
+rows_eq_hepatocyte = [1, 2, 3, 4, 5, 6, 7] ;                   %in original data, what rows do you want to add a specific value to for the hepatocytes?
 
 markers_other = [0, 0, 0, 41] ;                                 %what are the values you want to specify?
 rows_eq_other = [1, 2, 3, 7] ;                                  %in original data, what rows do you want to add a specific value to for the other cell line?
@@ -80,8 +83,24 @@ for c=1:cell_num
 end
 sample_num = size(CL,2) ;           %don't change this, just a nice variable to have to keep track of what the sample number is
    
+
+
 P = (max(C(:)).*rand(size(C,1), cell_num) + min(C(:)))  ; %P is as tall as the protein number and as long as the cell number. random numbers 
 %in the distribution of the max of C to the min of C
+
+%fit P to pass equality constraints. For each cell line there is one for
+%loop
+for a=1:length(markers_hepatocyte) 
+    P(rows_eq_hepatocyte(a), hepatocyte) = markers_hepatocyte(a) ; 
+end
+
+for a=1:length(markers_other) 
+    P(rows_eq_other(a), other) = markers_other(a) ; 
+end
+
+
+
+
 
 P_flat = reshape(P,(numel(P)), 1) ; %flatten the arrays for use in optimizers
 CL_flat = reshape(CL,(numel(CL)), 1) ;
@@ -113,9 +132,9 @@ end
 beq = ones(sample_num, 1) ;                          %this is the number of equalities, only considering CL right now, so is number of samples we have (which will = number of rows in Aeq) 
 
 %%%%% hepatocytes
-for a = 1:length(rows_eq_hepatocytes) 
+for a = 1:length(rows_eq_hepatocyte) 
     new_a = zeros(1, length(Aeq)) ;
-    new_a(sub2ind(size(P), rows_eq_hepatocytes(a), hepatocyte)) = 1 ;
+    new_a(sub2ind(size(P), rows_eq_hepatocyte(a), hepatocyte)) = 1 ;
     Aeq = [Aeq ; new_a] ;
     beq = [beq; markers_hepatocyte(a)] ;
 end
@@ -141,9 +160,9 @@ ub(length(P_flat)+1:end) = 1 ;                      %and is 1 for the cell line
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%% , 'Algorithm', 'sqp'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1.0000e-12, 'StepTolerance', 1.0e-9) ;
+options = optimoptions(@fmincon,'MaxIterations', 300000, 'MaxFunctionEvaluations',3000000, 'OptimalityTolerance', 1.0000e-12, 'StepTolerance', 1.0e-7) ;
 f = @(cguess_flat)objective(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
-[x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
+[x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
