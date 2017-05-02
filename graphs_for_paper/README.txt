@@ -9,6 +9,8 @@ The files are in Masters_Thesis/data/for_plotting_project
 - raw_data_before_filtering_bad_proteib_still_nan			--> for showing scatter plot before filtering
 - post_processing_no_filtering_of_protein_for_scatterplot	--> UPDATED for scatterplot, doing normalization (width only cause I am lazy) and imputation
 - post_processing_YES_filtering_of_3_protein_for_scatterplot--> UPDATED for scatterplot, doing " " Did standard removal which is take away <= 3
+- /data/data_original_with_all_id_cols.txt 					--> I think this is just the actual data, not used by perseus or something. Used in profile plot and peptide piecharts 
+
 
 so the order of the histograms are:
 raw data
@@ -36,8 +38,8 @@ data = pd.read_csv('../../data/for_plotting_project/raw_data_after_filtering_bad
 
 The graphs I need are: 										GRAPH NAME  							INPUTS
 - Scatter plot with the density, comparing two values   --> scatterplot.py						--> raw_data_before and raw_data_after
-- PCA 													--> 
-- peptide piechart 										-->
+- PCA 													--> pca.py 								--> PCA_projections_ie_coordinants.txt
+- peptide piechart 										--> piechart_peptides.py 				--> data/data_original_with_all_id_cols.txt
 - functional annotation 								-->
-- profile plot  										-->
-- histograms   											--> 
+- profile plot  										--> profile_markers.py 					--> data/data_original_with_all_id_cols.txt
+- histograms   											--> histograms.py 						--> raw_data_bef / log_trans_data/ imputed_data / park7 data
