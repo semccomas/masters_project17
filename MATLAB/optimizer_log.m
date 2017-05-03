@@ -31,10 +31,11 @@ cell lines without adding more loops
 
 %}
 
-%C = [50 20 10;50 50 50;5 8 9;60 72 76]  ;
-filename = 'C:\Users\sarmc412\OneDrive\liver\practice.csv';
-C = xlsread(filename)  ;
 
+%%% NOTE: THIS IS THE SAME AS MINI OPTIMIZER ON 3/5
+
+filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_small_liver.xlsx';
+C = xlsread(filename)  ;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% User input part %%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,16 +44,16 @@ C = xlsread(filename)  ;
 hepatocyte = 1 ;                    % ways of accessing columns and just keeping things straight
 other = 2 ;                          
 cell_num = 2 ;                      %will change the dimension of P and CL. Change if you want more cell types
-
+zeroish = min(C(:)) ;
 
 %CONSTRAINTS- NOT USER INPUT. comment in our out depending
-lower_limit = -0.0015 ;              %for b in inequality constraint
+lower_limit = -min(C(:)) ;              %for b in inequality constraint
 rows_ineq_other = [4, 5, 6] ;        %for A in ineq constraint. also = len b
 
-markers_hepatocyte = [90, 318, 17, 0, 0, 0, 41] ;               %what are the values you want to specify?
+markers_hepatocyte = [6.457, 8.297, 4.001, zeroish, zeroish, zeroish, 5.367] ;               %what are the values you want to specify?
 rows_eq_hepatocyte = [1, 2, 3, 4, 5, 6, 7] ;                   %in original data, what rows do you want to add a specific value to for the hepatocytes?
 
-markers_other = [0, 0, 0, 41] ;                                 %what are the values you want to specify?
+markers_other = [zeroish, zeroish, zeroish, 5.367] ;                                 %what are the values you want to specify?
 rows_eq_other = [1, 2, 3, 7] ;                                  %in original data, what rows do you want to add a specific value to for the other cell line?
 
 
@@ -85,7 +86,7 @@ sample_num = size(CL,2) ;           %don't change this, just a nice variable to 
    
 
 
-P = (max(C(:)).*rand(size(C,1), cell_num) + min(C(:)))  ; %P is as tall as the protein number and as long as the cell number. random numbers 
+P = ((max(C(:)) - min(C(:))).*rand(size(C,1), cell_num) + min(C(:)))  ; %P is as tall as the protein number and as long as the cell number. random numbers 
 %in the distribution of the max of C to the min of C
 
 %fit P to pass equality constraints. For each cell line there is one for
@@ -147,7 +148,7 @@ for a = 1:length(rows_eq_other)
     beq = [beq; markers_other(a)] ;
 end
 
-lb = zeros(size(cguess_flat)) ;                     %all values must be positive
+lb = repmat(zeroish, size(cguess_flat)) ;                     %all values must be positive
 ub = zeros(size(cguess_flat)) ;    
 ub(1:length(P_flat)) = max(C(:)) ;                        %upper bounds for protein is like 500, change if you want
 ub(length(P_flat)+1:end) = 1 ;                      %and is 1 for the cell line
@@ -156,11 +157,10 @@ ub(length(P_flat)+1:end) = 1 ;                      %and is 1 for the cell line
 
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%% , 'Algorithm', 'sqp'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1.0000e-12, 'StepTolerance', 1.0e-7) ;
+options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1e-15, 'StepTolerance', 3) ;
 f = @(cguess_flat)objective(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
 [x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) 
 

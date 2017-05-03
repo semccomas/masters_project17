@@ -160,7 +160,7 @@ ub(length(P_flat)+1:end) = 1 ;                      %and is 1 for the cell line
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%% , 'Algorithm', 'sqp'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-options = optimoptions(@fmincon,'MaxIterations', 300000, 'MaxFunctionEvaluations',3000000, 'OptimalityTolerance', 1.0000e-12, 'StepTolerance', 1.0e-7) ;
+options = optimoptions(@fmincon,'MaxIterations', 300000, 'MaxFunctionEvaluations',300000, 'OptimalityTolerance', 1.0000e-12, 'StepTolerance', 1.0e-7) ;
 f = @(cguess_flat)objective(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
 [x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) 
 
