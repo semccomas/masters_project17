@@ -36,7 +36,7 @@ cell lines without adding more loops
 
 filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_small_liver.xlsx';
 C = xlsread(filename)  ;
-
+% uncomment if you want liver only C = C(:,8:end) ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% User input part %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,10 +148,15 @@ for a = 1:length(rows_eq_other)
     beq = [beq; markers_other(a)] ;
 end
 
-lb = repmat(zeroish, size(cguess_flat)) ;                     %all values must be positive
+%lb = repmat(zeroish, size(cguess_flat)) ;                     %all values must be positive
+
+lb = zeros(size(cguess_flat)) ;
+lb(1:length(P_flat)) = zeroish + eps ;
+lb(length(P_flat)+1:end) = 0 + eps ;
+
 ub = zeros(size(cguess_flat)) ;    
-ub(1:length(P_flat)) = max(C(:)) ;                        %upper bounds for protein is like 500, change if you want
-ub(length(P_flat)+1:end) = 1 ;                      %and is 1 for the cell line
+ub(1:length(P_flat)) = max(C(:)) + eps ;                        %upper bounds for protein is like 500, change if you want
+ub(length(P_flat)+1:end) = 1 + eps;                      %and is 1 for the cell line
 
 
 
@@ -160,10 +165,10 @@ ub(length(P_flat)+1:end) = 1 ;                      %and is 1 for the cell line
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%% , 'Algorithm', 'sqp'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1e-15, 'StepTolerance', 3) ;
-f = @(cguess_flat)objective(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
-[x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) 
-
+options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'Algorithm', 'sqp', 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10) ;
+f = @(cguess_flat)objective_log(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
+[x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
+fval
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% Quality control  %%%%%%%%%%%%%%%%%%%%%%%
