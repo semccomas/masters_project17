@@ -10,6 +10,10 @@ The files are in Masters_Thesis/data/for_plotting_project
 - post_processing_no_filtering_of_protein_for_scatterplot	--> UPDATED for scatterplot, doing normalization (width only cause I am lazy) and imputation
 - post_processing_YES_filtering_of_3_protein_for_scatterplot--> UPDATED for scatterplot, doing " " Did standard removal which is take away <= 3
 - /data/data_original_with_all_id_cols.txt 					--> I think this is just the actual data, not used by perseus or something. Used in profile plot and peptide piecharts 
+- pca_loadings_protein_after_data_procc.txt  				--> for functional analysis of PCA loadings
+- PCA_projections_JEJ_ONLY.txt								--> " "
+- PCA_loadings_JEJ_ONLY.txt 								--> " "
+
 
 
 so the order of the histograms are:
@@ -23,6 +27,17 @@ normalized park7 data
 the 5 RGB colors I have decided on so far:
 
 https://color.adobe.com/sv/create/color-wheel/?base=2&rule=Analogous&selected=2&name=Mitt%20Color-tema&mode=rgb&rgbvalues=1,0.014821614937038263,0.6002243854768822,0.5715296840429083,0.03201233040729512,0.91,0.02235441838411878,0.014821614937038263,1,0.03201233040729512,0.5396439346878941,0.91,0.03517838506296167,1,0.8301071485757998&swatchOrder=0,1,2,3,4
+
+
+colors NEW:
+black = (0, 0, 0) or 000000 ---> these numbers * 255 == actual rgb if you want to look online. Here I am just testing. So divide by 255 to get matplotlib color
+dark blue = (0, 0, 200) or #0000c8
+purple = #7400FF (116.40625    0.       255.)
+pink = #E83DC1 (232, 61, 193)
+salmon beige = #FF8C73 (255, 140, 115)
+yellow = #FFD827  (255, 216, 39)
+
+
 
 
 magenta: RGB = [255, 5, 153]

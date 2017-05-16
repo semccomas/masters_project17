@@ -18,7 +18,7 @@ def scatter(dataframe, after):
 	z = np.asarray(dataframe.loc[:,'N: Density_Jejunum concentration (pmol/mg) H15_Jejunum concentration (pmol/mg) H12'])
 
 	fig, ax = plt.subplots()
-	cax = ax.scatter(j7, j13, c=z, s=20, edgecolor='')
+	cax = ax.scatter(j7, j13, c=z, s=20, edgecolor='', cmap = plt.cm.gnuplot2)
 	fig.colorbar(cax)
 	ax.text(-10,11,'Pearson R = {0}\nSpearman R = {1}'.format(r, s))
 	ax.set_xlabel('$log_{10}$ Concentration sample H7(pmol/mg)')
@@ -53,4 +53,10 @@ def rval(concentrations):
 rc = rval(c)
 rca = rval(c_after)
 print np.mean(rc),'<-- before' , 'after -->' , np.mean(rca)
+
+
+
+
+
+
 

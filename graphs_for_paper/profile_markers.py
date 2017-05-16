@@ -28,18 +28,21 @@ markers_df = conc.loc[markers].transpose()
 #markers_df = markers_df.subtract(markers_df['PARK7'], 0)
 #colors = ['red','red','red','green','green','green','green', 'orange', 'orange', 'orange', 'orange', 'orange', 'orange' ,'black']
 
-alphas = np.array([1.0, 1.0, 1.0, 0.3, 0.3, 1.0, 1.0, 1.0, 1.0])
+alphas = np.array([1.0, 1.0, 1.0, 0.6, 0.6, 1.0, 1.0, 1.0, 1.0])
 rgba_colors = np.zeros(((len(markers),4)))
 rgba_colors[:, 3] = alphas
 for x in xrange(len(markers)):
 	if x < 3:
-		rgba_colors[x][0] = 1.0 #red 
+		rgba_colors[x][0] = 0.90980392 #pink(232, 61, 193)  [ 0.90980392,  0.23921569,  0.75686275]
+		rgba_colors[x][1] = 0.23921569
+		rgba_colors[x][2] = 0.75686275
 	elif x < 5:
-		rgba_colors[x][1] = 0.5019607843137255 #green
+		rgba_colors[x][2] = 0.90196078 #blue 0, 0, 0.90196078]
 	#elif x > 7:
 	else:
-		rgba_colors[x][0] = 1.0 #orange
-		rgba_colors[x][1] = 0.48
+		rgba_colors[x][0] = 1.0 #salmon beige [ 1.        ,  0.54901961,  0.45098039]
+		rgba_colors[x][1] = 0.54901961
+		rgba_colors[x][2] = 0.45098039
 #rgba_colors[[0,1,2]][:,0] = 1
 rgba_colors[8][0:3] = 0
 
@@ -50,10 +53,10 @@ ax.set_xticks(np.arange(len(markers_df)))
 ax.set_xticklabels(markers_df.index)
 ax.set_ylim ([-6,8])
 PARK = mpatches.Patch(color='black', label='PARK7/ DJ1')
-EP = mpatches.Patch(color='red', label='Epithelium')
+EP = mpatches.Patch(color='#E83DC1', label='Epithelium')
 #ED = mpatches.Patch(color='blue', label='Endothelium')
-TP = mpatches.Patch(color='orange', label='Transport Proteins')
-BM = mpatches.Patch(color='green', alpha = 0.5, label='Basement Membrane')
+TP = mpatches.Patch(color='#FF8C73', label='Transport Proteins')
+BM = mpatches.Patch(color='#0000E6', alpha = 0.5, label='Basement Membrane')
 
 
 
