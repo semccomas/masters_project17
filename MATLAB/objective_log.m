@@ -1,6 +1,6 @@
 %HELP - input is cguess_flat. Out is (P*CL/C). C referenced inside function
 
-function out = minimize(cguess_flat, C, P_shape, CL_shape)
+function out = objective_log(cguess_flat, C, P_shape, CL_shape)
 
 prod_ps = prod(P_shape) ;                     %same as numel(P) but since we only import the shape of P here this is easier 
 

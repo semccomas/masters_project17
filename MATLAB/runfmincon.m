@@ -31,12 +31,18 @@ cell lines without adding more loops
 
 %}
 
+function [history,searchdir] = runfmincon
+ 
+% Set up shared variables with OUTFUN
+history.x = [];
+history.fval = [];
+searchdir = [];
+ 
+
 %%% NOTE: THIS IS THE SAME AS MINI OPTIMIZER ON 3/5
 
-%filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_big_liver.xlsx';
 filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_small_liver.xlsx';
 C = xlsread(filename)  ;
-C(find(isnan(C))) = zeroish ;   %remove all nans 
 % uncomment if you want liver only C = C(:,8:end) ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% User input part %%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,15 +169,15 @@ ub(length(P_flat)+1:end) = 1 + eps;                      %and is 1 for the cell 
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  'Algorithm', 'sqp',
-%%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%% , 'Algorithm', 'sqp'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10) ;
-f = @(cguess_flat)objective_log(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
-[x,fval,searchdir, optimValues, constraints] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
 
-diary('diaryfmincon2.txt')
+options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'Algorithm', 'sqp', 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10, 'OutputFcn',@outfun) ;
+f = @(cguess_flat)objective_log(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
+[x,fval,searchdir, optimValues] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% Quality control  %%%%%%%%%%%%%%%%%%%%%%%
@@ -184,5 +190,5 @@ x_C = x_P * x_CL    ;        %compare this one to C
 comp = x_C - C  ;                   %for a more quantitative comparison
 
 
-
+end
 
