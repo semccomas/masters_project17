@@ -166,12 +166,14 @@ ub(length(P_flat)+1:end) = 1 + eps;                      %and is 1 for the cell 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  'Algorithm', 'sqp',
 %%%%%%%%%%%%%%%%% The actual solver %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+diary('diaryfmincon2.txt')
 
-options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10, 'PlotFcn', @optimplotfval) ;
+options = optimoptions(@patternsearch, 'MaxFunctionEvaluations', 3000000, 'MeshTolerance', 1e-10, 'StepTolerance', 1e-20, 'PlotFcn', @psplotbestf)
+%options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10, 'PlotFcn', @optimplotfval) ;
 f = @(cguess_flat)objective_log(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
-[x,fval,searchdir, optimValues, constraints] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
+[x,fval] = patternsearch(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
 
-diary('diaryfmincon3.txt')
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%% Quality control  %%%%%%%%%%%%%%%%%%%%%%%

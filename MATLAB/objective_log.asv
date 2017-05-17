@@ -3,6 +3,8 @@
 
 function out = objective_log(cguess_flat, C, P_shape, CL_shape)
 
+%filename = 'testing.mat' ;
+
 prod_ps = prod(P_shape) ;                     %same as numel(P) but since we only import the shape of P here this is easier 
 
 %%% reshaping arrays %%%
@@ -12,15 +14,11 @@ CL_flat = cguess_flat(prod_ps+1:end) ;       %had to add one just for matlab ind
 P_new = reshape(P_flat, P_shape) ;
 CL_new = reshape(CL_flat, CL_shape) ;
 
-%{
-sum2 = sum(P_new) %sum(CL_new,2)
-sumP = sum2(1) %[sumP;sum(P_flat)] 
+sumP = sum(P_flat)
+%sums_for_P = [sums_for_P;sum(P_flat)] ;
+%sums_for_CL = [sums_for_CL;sum(CL_new(:))] ;
 
-fid = fopen('loop.txt', 'at');
-fprintf(fid, '%6.2f %12.8f\n', sumP);
-fid = fclose('all'); 
-%save('testing.mat', 'sumP', '-append') 
-%}
+save('testing.mat', 'sumP) 
 
 %%% actual optimizer %%%
 cguess = P_new * CL_new ;
