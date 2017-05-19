@@ -24,9 +24,12 @@ fid = fclose('all');
 
 %%% actual optimizer %%%
 cguess = P_new * CL_new ;
-weight = 1 ;% ./ (C + eps) ;
+weight = 1 ; %./ (C + eps) ;
 
-out = sum(sum((abs(cguess - C).^2) .* weight)) ;    
+out = sum(sum((abs(cguess - C).^2) .* weight)) ;   % <--- one way
+%out = sum(sum(abs(log2(cguess ./ C)))) ;
+
+
 %did abs here because it feels like you just want to know the diff 
 %did sum twice because it was a matrix issue, might fix when flattening
  %921.942

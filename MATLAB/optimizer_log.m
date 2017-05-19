@@ -33,8 +33,8 @@ cell lines without adding more loops
 
 %%% NOTE: THIS IS THE SAME AS MINI OPTIMIZER ON 3/5
 
-%filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_big_liver.xlsx';
-filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_small_liver.xlsx';
+filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_big_liver.xlsx';
+%filename = 'C:\Users\sarmc412\OneDrive\liver\perseus_trans_imput_small_liver.xlsx';
 C = xlsread(filename)  ;
 % uncomment if you want liver only C = C(:,8:end) ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,9 +87,9 @@ sample_num = size(CL,2) ;           %don't change this, just a nice variable to 
    
 
 
-P = ((max(C(:)) - min(C(:))).*rand(size(C,1), cell_num) + min(C(:)))  ; %P is as tall as the protein number and as long as the cell number. random numbers 
+%P = ((max(C(:)) - min(C(:))).*rand(size(C,1), cell_num) + min(C(:)))  ; %P is as tall as the protein number and as long as the cell number. random numbers 
 %in the distribution of the max of C to the min of C
-
+P = C(:, end-1:end)
 %fit P to pass equality constraints. For each cell line there is one for
 %loop
 for a=1:length(markers_hepatocyte) 
@@ -168,10 +168,10 @@ ub(length(P_flat)+1:end) = 1 + eps;                      %and is 1 for the cell 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 diary('diaryfmincon2.txt')
 
-options = optimoptions(@patternsearch, 'MaxFunctionEvaluations', 3000000, 'MeshTolerance', 1e-10, 'StepTolerance', 1e-20, 'PlotFcn', @psplotbestf)
-%options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',30000, 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10, 'PlotFcn', @optimplotfval) ;
+%options = optimoptions(@patternsearch, 'MaxFunctionEvaluations', 3000000, 'MeshTolerance', 1e-10, 'StepTolerance', 1e-20, 'PlotFcn', @psplotbestf, 'ConstraintTolerance', 1.0e-20)
+options = optimoptions(@fmincon,'MaxIterations', 30000, 'MaxFunctionEvaluations',300000, 'OptimalityTolerance', 1e-20, 'StepTolerance', 1e-20, 'Display','iter', 'ConstraintTolerance', 1e-10, 'PlotFcn', @optimplotfval) ;
 f = @(cguess_flat)objective_log(cguess_flat, C, size(P), size(CL)) ;  %the anonymous function so that we can add C, P_shape, and CL_shape 
-[x,fval] = patternsearch(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
+[x,fval] = fmincon(f, cguess_flat, A, b, Aeq, beq, lb, ub, [], options) ;
 
 
 
