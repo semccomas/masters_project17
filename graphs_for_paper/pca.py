@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 
 
-#projections = pd.read_csv('../../data/for_plotting_project/PCA_projections_ie_coordinants.txt', delimiter = '\t', index_col = -1)
-projections = pd.read_csv('../../data/for_plotting_project/PCA_projections_JEJ_ONLY.txt', delimiter = '\t', index_col = -1, decimal = ',')
+projections = pd.read_csv('../../data/for_plotting_project/PCA_projections_ie_coordinants.txt', delimiter = '\t', index_col = -1)
+#projections = pd.read_csv('../../data/for_plotting_project/PCA_projections_JEJ_ONLY.txt', delimiter = '\t', index_col = -1, decimal = ',')
 
 colon = [n for n in projections.index if '(mol/g)' in n]
 caco = [n for n in projections.index if 'n(pmol/mg)' in n]
@@ -16,7 +16,7 @@ caco_color = np.repeat(['#E83DC1'], len(caco), axis = 0)
 jejunum_color = np.repeat(['#7400FF'], len(jejunum), axis = 0)
 colors = np.concatenate((jejunum_color, colon_color, caco_color), axis = 0)
 
-j = 'yes'
+j = 'ys'
 
 if j == 'yes':
 	print 'jejunum'
@@ -25,9 +25,9 @@ if j == 'yes':
 	component2 = projections.loc[:, 'Component 2']
 	fix,ax = plt.subplots()
 	ax.scatter(component1, component2, color = colors)
-	ax.set_xlabel('Component 1 (???%)')
-	ax.set_ylabel('Component 2 (???%)')
-	ax.set_title('Principal component analysis Jejunum')
+	ax.set_xlabel('Component 1 (36.1%)')
+	ax.set_ylabel('Component 2 (13.4%)')
+	#ax.set_title('Principal component analysis Jejunum')
 	plt.savefig('pca_JEJ.png', dpi = 1000)
 else:
 	print 'normal'
@@ -45,10 +45,10 @@ else:
 	ax.scatter(c1colon, c2colon, color = colon_color)
 	ax.scatter(c1caco, c2caco, color = caco_color)
 	#ax.scatter(component1, component2, color = colors)
-	ax.set_xlabel('Component 1 (55.5%)')
-	ax.set_ylabel('Component 2 (12.5%)')
-	ax.set_title('Principal component analysis')
-	ax.legend(labels)
+	ax.set_xlabel('Component 1 (46.5%)')
+	ax.set_ylabel('Component 2 (11.1%)')
+	#ax.set_title('Principal component analysis')
+	ax.legend(labels, fontsize = 12)
 	plt.savefig('pca.png', dpi = 1000)
 
 

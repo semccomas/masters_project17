@@ -55,7 +55,16 @@ HPA_with_all = find_in_hpa(all_comp1)
 HPA_with_comp2 = find_in_hpa(comp2)
 
 
+'''
+black = (0, 0, 0) or 000000 ---> these numbers * 255 == actual rgb if you want to look online. Here I am just testing. So divide by 255 to get matplotlib color
+blue = (0, 0, 230) or ##0000E6
+purple = #7400FF (116.40625    0.       255.)
+pink = #E83DC1 (232, 61, 193)
+salmon beige = #FF8C73 (255, 140, 115)
+yellow = #FFD827  (255, 216, 39)
 
+
+'''
 # PLOTTING 
 cell_types_all = dict(HPA_with_all['Cell type'].value_counts())     				#count the occurences of each cell type
 cell_types_comp1 = dict(HPA_with_comp1['Cell type'].value_counts())
@@ -67,23 +76,23 @@ del cell_types_all['peripheral nerve']
 #get only HPA vals for the cell types in cell_types
 
 for key in cell_types_all:
-	cell_types_all[key] = cell_types_all[key] / 10   #so its not so big, fix later
+	cell_types_all[key] = cell_types_all[key] / 5   #so its not so big, fix later
 
 
 fig, ax = plt.subplots()
 width = 0.3
-pca_vals = ax.bar(np.arange(len(cell_types_comp1)) - width, cell_types_comp1.values(), width, color = 'blue', align = 'center', edgecolor ='black')
-pca_vals2 = ax.bar(np.arange(len(cell_types_comp2)), cell_types_comp2.values(), width, color = 'green', align = 'center', edgecolor = 'black')
-hpa_vals = ax.bar(np.arange(len(cell_types_comp1)) + width, cell_types_all.values(), width, color = 'r', align = 'center', edgecolor = 'black')
+pca_vals = ax.bar(np.arange(len(cell_types_comp1)) - width, cell_types_comp1.values(), width, color = '#FF8C73', align = 'center', edgecolor ='black')
+pca_vals2 = ax.bar(np.arange(len(cell_types_comp2)), cell_types_comp2.values(), width, color = '#000000', align = 'center', edgecolor = 'black')
+hpa_vals = ax.bar(np.arange(len(cell_types_comp1)) + width, cell_types_all.values(), width, color = '#0000E6', align = 'center', edgecolor = 'black')
 
 ax.set_xticklabels(('peripheral nerve','epithelial cells','adipocytes','fibroblasts','chondrocytes','endothelial cells'), rotation = 45)
 ax.set_xticks(np.arange(len(cell_types_comp1)))
 ax.set_ylabel('Count')
-ax.legend((pca_vals[0], hpa_vals[0], pca_vals2[0]), ('Component 1', 'Component 2', 'Overall dataset/ 10'))
-plt.title('Cell types contributing most to PCA')
+ax.legend((pca_vals[0], pca_vals2[0], hpa_vals[0]), ('Component 1', 'Component 2', 'Overall dataset (/5)'))
+#plt.title('Cell types contributing most to PCA')
 plt.tight_layout()
 #plt.savefig('PCA contributing proteins.png')
-plt.savefig('PCA_contributing_proteins_JEJ_ONLY.png')
+plt.savefig('PCA_contributing_proteins_JEJ_ONLY.png', dpi = 1000)
 
 ### HELLO!!!!!!!!!!!!!!! RIGHT NOW WE ARE ON THE PCA FOR THE JEJ ONLY. TO CHANGE BACK JUST COMMENT OUT DATA AND SAVEFIG
 

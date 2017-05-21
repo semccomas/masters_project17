@@ -47,7 +47,7 @@ for x in xrange(len(markers)):
 rgba_colors[8][0:3] = 0
 
 
-plt.rcParams.update({'font.size': 6})
+#plt.rcParams.update({'font.size': 6})
 ax = markers_df.plot(legend = False, color = rgba_colors)
 ax.set_xticks(np.arange(len(markers_df)))
 ax.set_xticklabels(markers_df.index)
@@ -65,7 +65,7 @@ BM = mpatches.Patch(color='#0000E6', alpha = 0.5, label='Basement Membrane')
 plt.legend(handles=[PARK, EP, TP, BM], bbox_to_anchor=(0.02,0.03), loc=3)   #loc = 2 = upper left. bbox is coordinates, first is x second is y
 plt.xlabel('Sample')
 plt.ylabel('$Log_2$(Concentration)')
-plt.title('Profile plot for Jejunum samples')
+#plt.title('Profile plot for Jejunum samples')
 plt.savefig('markers.png', dpi = 700)
 #plt.show()
 
