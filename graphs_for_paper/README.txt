@@ -31,7 +31,7 @@ https://color.adobe.com/sv/create/color-wheel/?base=2&rule=Analogous&selected=2&
 
 colors NEW:
 black = (0, 0, 0) or 000000 ---> these numbers * 255 == actual rgb if you want to look online. Here I am just testing. So divide by 255 to get matplotlib color
-dark blue = (0, 0, 200) or #0000c8
+blue = (0, 0, 230) or ##0000E6
 purple = #7400FF (116.40625    0.       255.)
 pink = #E83DC1 (232, 61, 193)
 salmon beige = #FF8C73 (255, 140, 115)
