@@ -34,12 +34,12 @@ Scripts in this file:
 
 
 colors chosen: (these numbers * 255 == actual rgb if you want to look online. Here I am just testing. So divide by 255 to get matplotlib color)
--black = #000000   	(0, 0, 0) 
--blue = #0000E6    (0, 0, 230) 
--purple = #7400FF    (116,  0, 255)
--pink = #E83DC1     (232, 61, 193)
--salmon beige = #FF8C73     (255, 140, 115)
--yellow = #FFD827      (255, 216, 39)
+- black = #000000   	(0, 0, 0) 
+- blue = #0000E6    (0, 0, 230) 
+- purple = #7400FF    (116,  0, 255)
+- pink = #E83DC1     (232, 61, 193)
+- salmon beige = #FF8C73     (255, 140, 115)
+- yellow = #FFD827      (255, 216, 39)
 
 
 
