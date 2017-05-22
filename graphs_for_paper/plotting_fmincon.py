@@ -33,7 +33,7 @@ ax1.set_ylabel('Step size', labelpad = 10)
 ax2.set_ylabel('F(x)')
 ax1.set_xlabel(' ')
 ax1.set_xlabel('Iterations')
-plt.savefig('MATLAB_eval.png', dpi = 1000)
+plt.savefig('MATLAB_eval.png', dpi = 700)
 
 #fval = Objective function value at the solution, returned as a real number. Generally, fval = fun(x).
 '''

@@ -54,15 +54,14 @@ ax.set_xticklabels(markers_df.index)
 ax.set_ylim ([-6,8])
 PARK = mpatches.Patch(color='black', label='PARK7/ DJ1')
 EP = mpatches.Patch(color='#E83DC1', label='Epithelium')
-#ED = mpatches.Patch(color='blue', label='Endothelium')
-TP = mpatches.Patch(color='#FF8C73', label='Transport Proteins')
 BM = mpatches.Patch(color='#0000E6', alpha = 0.5, label='Basement Membrane')
+TP = mpatches.Patch(color='#FF8C73', label='Transport Proteins')
 
 
 
 #bbox_to_anchor=(0,1.15),
 
-plt.legend(handles=[PARK, EP, TP, BM], bbox_to_anchor=(0.02,0.03), loc=3)   #loc = 2 = upper left. bbox is coordinates, first is x second is y
+plt.legend(handles=[PARK, EP, BM, TP], bbox_to_anchor=(0.02,0.03), loc=3)   #loc = 2 = upper left. bbox is coordinates, first is x second is y
 plt.xlabel('Sample')
 plt.ylabel('$Log_2$(Concentration)')
 #plt.title('Profile plot for Jejunum samples')
