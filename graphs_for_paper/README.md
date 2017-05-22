@@ -33,16 +33,6 @@ Scripts in this file:
 
 
 
-
-The graphs I need are: 										GRAPH NAME  							INPUTS
-- Scatter plot with the density, comparing two values   --> scatterplot.py						--> raw_data_before and raw_data_after
-- PCA 													--> pca.py 								--> PCA_projections_ie_coordinants.txt
-- peptide piechart 										--> piechart_peptides.py 				--> data/data_original_with_all_id_cols.txt
-- functional annotation 								-->
-- profile plot  										--> profile_markers.py 					--> data/data_original_with_all_id_cols.txt
-- histograms   											--> histograms.py 						--> raw_data_bef / log_trans_data/ imputed_data / park7 data
-
-
 colors chosen: (these numbers * 255 == actual rgb if you want to look online. Here I am just testing. So divide by 255 to get matplotlib color)
 -black = #000000   	(0, 0, 0) 
 -blue = #0000E6    (0, 0, 230) 
